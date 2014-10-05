@@ -48,8 +48,10 @@ func Encode(u []byte, b int) (r []byte) {
 }
 
 // Decode takes an []byte u containing base b encoded data and returns []byte r containing byte data.
+//
 // b can not be grater than 62 or less than 2.
-// u may not contain characters outside of the base character representation, eg. base 2 can only contain "0" and "1" while base62 can only contain 0-9a-zA-z.
+//
+// u may not contain characters outside of the base character representation, eg. base 2 can only contain "0" and "1" while base62 can only contain 0-9a-zA-Z.
 func Decode(u []byte, b int) (r []byte) {
 
 	if b < 2 || b > len(digits) {
