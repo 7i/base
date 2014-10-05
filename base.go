@@ -23,7 +23,7 @@ var bufferSizeMultiplier = [...]float64{0, 0, 8, 5.052, 4, 3.452, 3.097, 2.852, 
 func Encode(u []byte, b int) (r []byte) {
 
 	if b < 2 || b > len(digits) {
-		panic("illegal FormatBigInt base")
+		panic("illegal Encode base")
 	}
 
 	a := big.NewInt(0).SetBytes(u)
@@ -55,7 +55,7 @@ func Encode(u []byte, b int) (r []byte) {
 func Decode(u []byte, b int) (r []byte) {
 
 	if b < 2 || b > len(digits) {
-		panic("Illegal ParseBigUint base")
+		panic("Illegal Decode base")
 	}
 
 	base := big.NewInt(int64(b))
