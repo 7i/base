@@ -10,7 +10,10 @@
 // For a standard implementations of base32 please se encoding/base32 in the standard lib.
 package base
 
-import "math/big"
+import (
+	"log"
+	"math/big"
+)
 
 const digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -23,7 +26,7 @@ var bufferSizeMultiplier = [...]float64{0, 0, 8, 5.052, 4, 3.452, 3.097, 2.852, 
 func Encode(u []byte, b int) (r []byte) {
 
 	if b < 2 || b > len(digits) {
-		panic("illegal Encode base")
+		log.Fatalln("Illegal Encode base")
 	}
 
 	a := big.NewInt(0).SetBytes(u)
@@ -55,7 +58,7 @@ func Encode(u []byte, b int) (r []byte) {
 func Decode(u []byte, b int) (r []byte) {
 
 	if b < 2 || b > len(digits) {
-		panic("Illegal Decode base")
+		log.Fatalln("Illegal Decode base")
 	}
 
 	base := big.NewInt(int64(b))
@@ -77,6 +80,8 @@ func Decode(u []byte, b int) (r []byte) {
 			}
 		}
 		if v.Int64() >= base.Int64() {
+			// If a parser uses base.Decode he can use recover() to handle this otherwise fatal error.
+			// See http://blog.golang.org/defer-panic-and-recover for more information.
 			panic("Illegal characters in u []byte")
 		}
 		n.Mul(n, base)
