@@ -19,7 +19,7 @@ var bufferSizeMultiplier = [...]float64{0, 0, 8, 5.052, 4, 3.452, 3.097, 2.852, 
 
 // Encode takes an []byte b containing byte data and returns []byte r containing base b encoded data.
 //
-// b can not be grater than 62 or less than 2.
+// b can not be grater than 62 or less than 2. If b is over 36 then r is case sensitive.
 func Encode(u []byte, b int) (r []byte) {
 
 	if b < 2 || b > len(digits) {
@@ -49,7 +49,7 @@ func Encode(u []byte, b int) (r []byte) {
 
 // Decode takes an []byte u containing base b encoded data and returns []byte r containing byte data.
 //
-// b can not be grater than 62 or less than 2.
+// b can not be grater than 62 or less than 2. If b is over 36 then u is case sensitive.
 //
 // u may not contain characters outside of the base character representation, eg. base 2 can only contain "0" and "1" while base62 can only contain 0-9a-zA-Z.
 func Decode(u []byte, b int) (r []byte) {
@@ -70,7 +70,11 @@ func Decode(u []byte, b int) (r []byte) {
 		case 'a' <= u && u <= 'z':
 			v.SetInt64(int64(u - 'a' + 10))
 		case 'A' <= u && u <= 'Z':
-			v.SetInt64(int64(u - 'A' + 10))
+			if b <= 36 {
+				v.SetInt64(int64(u - 'A' + 10))
+			} else {
+				v.SetInt64(int64(u - 'A' + 36))
+			}
 		}
 		if v.Int64() >= base.Int64() {
 			panic("Illegal characters in u []byte")
