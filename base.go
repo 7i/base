@@ -1,10 +1,14 @@
-// This code is licensed under the CC0 1.0 license
-// that can be found here: http://creativecommons.org/publicdomain/zero/1.0/
+// Use of this source code is governed by the CC0 1.0
+// license that can be found in the LICENSE file or here:
+// http://creativecommons.org/publicdomain/zero/1.0/
 
 // Package base implements encodeing and decoding of data in to specified base encoded data.
+//
 // Package base handles any base between base2 and base62 eg. base6, base12, base32, base36, base60 etc.
-// The base ascii representation is probably not compatibe with any other implementation of the corresponding base,
-// for a standard implementations of base32 please se encoding/base32 in the standard lib.
+//
+// The base ascii representation is probably not compatibe with any other implementation of the corresponding base.
+//
+// For a standard implementations of base32 please se encoding/base32 in the standard lib.
 package base
 
 import "math/big"
@@ -14,7 +18,8 @@ const digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 // Precalculated buffer size multipliers for all valid bases
 var bufferSizeMultiplier = [...]float64{0, 0, 8, 5.052, 4, 3.452, 3.097, 2.852, 2.671, 2.53, 2.413, 2.317, 2.233, 2.168, 2.104, 2.052, 2, 1.962, 1.923, 1.884, 1.852, 1.826, 1.8, 1.775, 1.749, 1.73, 1.704, 1.684, 1.665, 1.652, 1.633, 1.62, 1.6, 1.588, 1.575, 1.562, 1.549, 1.542, 1.53, 1.517, 1.504, 1.497, 1.483, 1.478, 1.471, 1.459, 1.452, 1.446, 1.439, 1.426, 1.42, 1.413, 1.407, 1.4, 1.394, 1.388, 1.381, 1.375, 1.368, 1.362, 1.355, 1.355, 1.349}
 
-// Encode takes an []byte b containing byte data and returns []byte r containing base36 encoded data.
+// Encode takes an []byte b containing byte data and returns []byte r containing base b encoded data.
+//
 // b can not be grater than 62 or less than 2.
 func Encode(u []byte, b int) (r []byte) {
 
