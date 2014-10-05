@@ -4,10 +4,9 @@
 
 // Package base implements encodeing and decoding of data in to specified base encoded data.
 //
-// Package base handles any base between base2 and base62 eg. base6, base12, base32, base36, base60 etc.
+// Package base handles any base between base2 and base62 eg. base6, base32, base36, base60 etc.
 //
 // The base ascii representation is probably not compatibe with any other implementation of the corresponding base.
-//
 // For a standard implementations of base32 please se encoding/base32 in the standard lib.
 package base
 
