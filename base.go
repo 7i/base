@@ -30,6 +30,10 @@ func Encode(u []byte, b int) (r []byte) {
 	}
 
 	a := big.NewInt(0).SetBytes(u)
+	if a.Uint64() == uint64(0) {
+		return []byte{}
+	}
+
 	base := big.NewInt(int64(b))
 	rem := big.NewInt(0)
 
