@@ -34,7 +34,6 @@ func TestDecode(t *testing.T) {
 }
 
 func TestEncode(t *testing.T) {
-
 	for i := 2; i < 63; i++ {
 		// Encode []byte{}
 		if string(base.Encode([]byte{}, i)) != string([]byte{}) {

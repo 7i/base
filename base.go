@@ -18,11 +18,13 @@ import (
 const digits = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 // Precalculated buffer size multipliers for all valid bases
-var bufferSizeMultiplier = [...]float64{0, 0, 8, 5.052, 4, 3.452, 3.097, 2.852, 2.671, 2.53, 2.413, 2.317, 2.233, 2.168, 2.104, 2.052, 2, 1.962, 1.923, 1.884, 1.852, 1.826, 1.8, 1.775, 1.749, 1.73, 1.704, 1.684, 1.665, 1.652, 1.633, 1.62, 1.6, 1.588, 1.575, 1.562, 1.549, 1.542, 1.53, 1.517, 1.504, 1.497, 1.483, 1.478, 1.471, 1.459, 1.452, 1.446, 1.439, 1.426, 1.42, 1.413, 1.407, 1.4, 1.394, 1.388, 1.381, 1.375, 1.368, 1.362, 1.355, 1.355, 1.349}
+var bufferSizeMultiplier = []float64{0, 0, 8, 5.052, 4, 3.452, 3.097, 2.852, 2.671, 2.53, 2.413, 2.317, 2.233, 2.168, 2.104, 2.052, 2, 1.962, 1.923, 1.884, 1.852, 1.826, 1.8, 1.775, 1.749, 1.73, 1.704, 1.684, 1.665, 1.652, 1.633, 1.62, 1.6, 1.588, 1.575, 1.562, 1.549, 1.542, 1.53, 1.517, 1.504, 1.497, 1.483, 1.478, 1.471, 1.459, 1.452, 1.446, 1.439, 1.426, 1.42, 1.413, 1.407, 1.4, 1.394, 1.388, 1.381, 1.375, 1.368, 1.362, 1.355, 1.355, 1.349}
 
 // Encode takes an []byte b containing byte data and returns []byte r containing base b encoded data.
 //
 // b can not be grater than 62 or less than 2. If b is over 36 then r is case sensitive.
+//
+// Take note that Encode will remove any null bytes in the start of u, if this is important for your application save original size of the raw string.
 func Encode(u []byte, b int) (r []byte) {
 
 	if b < 2 || b > len(digits) {
@@ -59,6 +61,8 @@ func Encode(u []byte, b int) (r []byte) {
 // b can not be grater than 62 or less than 2. If b is over 36 then u is case sensitive.
 //
 // u may not contain characters outside of the base character representation, e.g. base 2 can only contain "0" and "1" while base62 can only contain 0-9a-zA-Z.
+//
+// Take note that Decode will remove any null bytes in the start of r, if this is important for your application save original size of the raw string.
 func Decode(u []byte, b int) (r []byte) {
 
 	if b < 2 || b > len(digits) {
@@ -84,7 +88,7 @@ func Decode(u []byte, b int) (r []byte) {
 			}
 		}
 		if v.Int64() >= base.Int64() {
-			// If a parser uses base.Decode he can use recover() to handle this otherwise fatal error.
+			// If a parser uses base.Decode it can use recover() to handle this otherwise fatal error.
 			// See http://blog.golang.org/defer-panic-and-recover for more information.
 			panic("Illegal characters in u []byte")
 		}
