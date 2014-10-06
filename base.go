@@ -90,7 +90,7 @@ func Decode(u []byte, b int) (r []byte) {
 		if v.Int64() >= base.Int64() {
 			// If a parser uses base.Decode it can use recover() to handle this otherwise fatal error.
 			// See http://blog.golang.org/defer-panic-and-recover for more information.
-			panic("Illegal characters in u []byte")
+			panic("Illegal characters in u []byte.\nUse recover() to handle this otherwise fatal error.")
 		}
 		n.Mul(n, base)
 		n.Add(n, v)
