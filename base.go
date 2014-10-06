@@ -2,12 +2,12 @@
 // license that can be found in the LICENSE file or here:
 // http://creativecommons.org/publicdomain/zero/1.0/
 
-// Package base implements encodeing and decoding of data in to specified base encoded data.
+// Package base implements encoding and decoding of data in to specified base encoded data.
 //
 // Package base handles any base between base2 and base62 eg. base6, base32, base36, base60 etc.
 //
-// The base ascii representation is probably not compatibe with any other implementation of the corresponding base.
-// For a standard implementations of base32 please se encoding/base32 in the standard lib.
+// The base ASCII representation is probably not compatible with any other implementation of the corresponding base.
+// For a standard implementations of base32 please see encoding/base32 in the standard lib.
 package base
 
 import (
@@ -37,7 +37,7 @@ func Encode(u []byte, b int) (r []byte) {
 	base := big.NewInt(int64(b))
 	rem := big.NewInt(0)
 
-	// Calculate the nessesary buffer size for the defined base
+	// Calculate the necessary buffer size for the defined base
 	i := int((float64(len(a.Bytes())))*bufferSizeMultiplier[b]) + 1
 	d := make([]byte, i)
 
@@ -58,7 +58,7 @@ func Encode(u []byte, b int) (r []byte) {
 //
 // b can not be grater than 62 or less than 2. If b is over 36 then u is case sensitive.
 //
-// u may not contain characters outside of the base character representation, eg. base 2 can only contain "0" and "1" while base62 can only contain 0-9a-zA-Z.
+// u may not contain characters outside of the base character representation, e.g. base 2 can only contain "0" and "1" while base62 can only contain 0-9a-zA-Z.
 func Decode(u []byte, b int) (r []byte) {
 
 	if b < 2 || b > len(digits) {
