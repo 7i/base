@@ -11,7 +11,7 @@
 package base
 
 import (
-	"log"
+	"fmt"
 	"math/big"
 )
 
@@ -25,15 +25,15 @@ var bufferSizeMultiplier = []float64{0, 0, 8, 5.052, 4, 3.452, 3.097, 2.852, 2.6
 // b can not be grater than 62 or less than 2. If b is over 36 then r is case sensitive.
 //
 // Take note that Encode will remove any null bytes in the start of u, if this is important for your application save original size of the raw string.
-func Encode(u []byte, b int) (r []byte) {
+func Encode(u []byte, b int) (r []byte, err error) {
 
 	if b < 2 || b > len(digits) {
-		log.Fatalln("Illegal Encode base")
+		return nil, fmt.Errorf("Illegal Encode base.\n")
 	}
 
 	a := big.NewInt(0).SetBytes(u)
 	if a.Uint64() == uint64(0) {
-		return []byte{}
+		return []byte{}, nil
 	}
 
 	base := big.NewInt(int64(b))
@@ -53,7 +53,7 @@ func Encode(u []byte, b int) (r []byte) {
 	i--
 	d[i] = digits[int(a.Int64())]
 
-	return d[i:]
+	return d[i:], nil
 }
 
 // Decode takes an []byte u containing base b encoded data and returns []byte r containing byte data.
@@ -63,10 +63,10 @@ func Encode(u []byte, b int) (r []byte) {
 // u may not contain characters outside of the base character representation, e.g. base 2 can only contain "0" and "1" while base62 can only contain 0-9a-zA-Z.
 //
 // Take note that Decode will remove any null bytes in the start of r, if this is important for your application save original size of the raw string.
-func Decode(u []byte, b int) (r []byte) {
+func Decode(u []byte, b int) (r []byte, err error) {
 
 	if b < 2 || b > len(digits) {
-		log.Fatalln("Illegal Decode base")
+		return nil, fmt.Errorf("Illegal Decode base.")
 	}
 
 	base := big.NewInt(int64(b))
@@ -86,14 +86,14 @@ func Decode(u []byte, b int) (r []byte) {
 			} else {
 				v.SetInt64(int64(u - 'A' + 36))
 			}
+		default:
+			v.SetInt64(int64(base.Int64()))
 		}
 		if v.Int64() >= base.Int64() {
-			// If a parser uses base.Decode it can use recover() to handle this otherwise fatal error.
-			// See http://blog.golang.org/defer-panic-and-recover for more information.
-			panic("Illegal characters in u []byte.\nUse recover() to handle this otherwise fatal error.")
+			return nil, fmt.Errorf("Illegal characters in base %d decoding.", b)
 		}
 		n.Mul(n, base)
 		n.Add(n, v)
 	}
-	return n.Bytes()
+	return n.Bytes(), nil
 }

@@ -15,20 +15,24 @@ var encodedRnd [][]byte
 func TestDecode(t *testing.T) {
 	for i := 2; i < 63; i++ {
 		// Decode []byte{}
-		if string(base.Decode([]byte{}, i)) != string([]byte{}) {
-			t.Errorf("Decode test []byte{} failed for base %d, got: \n%v \nexpected: empty []byte.", i, string(base.Encode([]byte{}, i)))
+		res, _ := base.Decode([]byte{}, i)
+		if string(res) != string([]byte{}) {
+			t.Errorf("Decode test []byte{} failed for base %d, got: \n%v \nexpected: empty []byte.", i, res)
 		}
 		// Decode 00 test
-		if string(base.Decode(encoded00, i)) != "" {
-			t.Errorf("Decode test encoded00 failed for base %d, got: \n%v \nexpected: empty []byte.", i, string(base.Decode(encoded00, i)))
+		res, _ = base.Decode(encoded00, i)
+		if string(res) != "" {
+			t.Errorf("Decode test encoded00 failed for base %d, got: \n%v \nexpected: empty []byte.", i, res)
 		}
 		// Decode FF test
-		if string(base.Decode(encodedFF[i-2], i)) != string(decodedFF) {
-			t.Errorf("Decode test encodedFF failed for base %d, got: \n%v \nexpected a []byte with 100 0xff.", i, base.Decode(encodedFF[i-2], i))
+		res, _ = base.Decode(encodedFF[i-2], i)
+		if string(res) != string(decodedFF) {
+			t.Errorf("Decode test encodedFF failed for base %d, got: \n%v \nexpected a []byte with 100 0xff.", i, res)
 		}
 		// Decode Rnd test
-		if string(base.Decode(encodedRnd[i-2], i)) != string(decodedRnd) {
-			t.Errorf("Decode test encodedRnd failed for base %d, got: \n%v \nexpected: the content of decodedRnd, see for exact value.", i, base.Decode(encodedRnd[i-2], i))
+		res, _ = base.Decode(encodedRnd[i-2], i)
+		if string(res) != string(decodedRnd) {
+			t.Errorf("Decode test encodedRnd failed for base %d, got: \n%v \nexpected: the content of decodedRnd, see for exact value.", i, res)
 		}
 	}
 }
@@ -36,20 +40,24 @@ func TestDecode(t *testing.T) {
 func TestEncode(t *testing.T) {
 	for i := 2; i < 63; i++ {
 		// Encode []byte{}
-		if string(base.Encode([]byte{}, i)) != string([]byte{}) {
-			t.Errorf("Encode test []byte{} failed for base %d, got: \n%v \nexpected: empty []byte.", i, string(base.Encode([]byte{}, i)))
+		res, _ := base.Encode([]byte{}, i)
+		if string(res) != string([]byte{}) {
+			t.Errorf("Encode test []byte{} failed for base %d, got: \n%v \nexpected: empty []byte.", i, string(res))
 		}
 		// Encode 00 test
-		if string(base.Encode(decoded00, i)) != string([]byte{}) {
-			t.Errorf("Encode test decoded00 failed for base %d, got: \n%v \nexpected: empty []byte.", i, string(base.Decode(decoded00, i)))
+		res, _ = base.Encode(decoded00, i)
+		if string(res) != string([]byte{}) {
+			t.Errorf("Encode test decoded00 failed for base %d, got: \n%v \nexpected: empty []byte.", i, string(res))
 		}
 		// Encode FF test
-		if string(base.Encode(decodedFF, i)) != string(encodedFF[i-2]) {
-			t.Errorf("Encode test decodedFF failed for base %d, got: \n%v \nexpected: \n%s.", i, base.Decode(decodedFF, i), string(encodedFF[i-2]))
+		res, _ = base.Encode(decodedFF, i)
+		if string(res) != string(encodedFF[i-2]) {
+			t.Errorf("Encode test decodedFF failed for base %d, got: \n%v \nexpected: \n%s.", i, string(res), string(encodedFF[i-2]))
 		}
 		// Encode Rnd test
-		if string(base.Encode(decodedRnd, i)) != string(encodedRnd[i-2]) {
-			t.Errorf("Encode test decodedRnd failed for base %d, got: \n%v \nexpected: \n%s.", i, base.Decode(decodedRnd, i), string(encodedRnd[i-2]))
+		res, _ = base.Encode(decodedRnd, i)
+		if string(res) != string(encodedRnd[i-2]) {
+			t.Errorf("Encode test decodedRnd failed for base %d, got: \n%v \nexpected: \n%s.", i, string(res), string(encodedRnd[i-2]))
 		}
 	}
 }
